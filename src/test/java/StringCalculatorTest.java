@@ -69,4 +69,10 @@ public class StringCalculatorTest {
     public void test_step3_new_line_delimiter_invalid(){
         stringCalculator.add("3,2,\n,1,5");
     }
+
+    @Test
+    public void test_step4_custom_delimiter(){
+        int actual = stringCalculator.add("//[-]\n3-2-1-6");
+        assertThat(actual, is(12));
+    }
 }
