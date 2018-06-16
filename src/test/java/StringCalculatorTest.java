@@ -52,4 +52,21 @@ public class StringCalculatorTest {
         int actual = stringCalculator.add("3,2,1,1,5");
         assertThat(actual, is(12));
     }
+
+    @Test
+    public void test_step3_new_line_delimiter_1(){
+        int actual = stringCalculator.add("3,2,1\n1,5");
+        assertThat(actual, is(12));
+    }
+
+    @Test
+    public void test_step3_new_line_delimiter_2(){
+        int actual = stringCalculator.add("3\n2,1\n1,5,3");
+        assertThat(actual, is(15));
+    }
+
+    @Test(expected = Exception.class)
+    public void test_step3_new_line_delimiter_invalid(){
+        stringCalculator.add("3,2,\n,1,5");
+    }
 }

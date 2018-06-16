@@ -11,7 +11,7 @@ public class StringCalculator {
         if(numbers == null || numbers.isEmpty()){
             return 0;
         }
-        return Arrays.stream(numbers.split(","))
+        return Arrays.stream(numbers.split("\\,|\\n"))
                 .collect(Collectors.summingInt(Integer::valueOf));
     }
 
