@@ -9,6 +9,9 @@ import java.util.regex.Pattern;
 public class StringCalculator {
 
     public static final String DEFAULT_DELIMITER = "[,\\n]";
+    public static final Pattern CUSTOM_DELIMITER_PATTERN = Pattern.compile("//\\[(.+)]\n(.+)");
+    public static final int DELIMITER_GROUP = 1;
+    public static final int NO_DELIMITER_GROUP = 2;
 
     public int add(String numbers) {
         if(numbers == null || numbers.isEmpty()){
@@ -21,21 +24,19 @@ public class StringCalculator {
     }
 
     private String removeDelimiter(String numbers) {
-        Pattern pattern = Pattern.compile("//\\[(.+)]\n(.+)");
-        Matcher matcher = pattern.matcher(numbers);
+        Matcher matcher = CUSTOM_DELIMITER_PATTERN.matcher(numbers);
 
         if(matcher.matches()){
-            return matcher.group(2);
+            return matcher.group(NO_DELIMITER_GROUP);
         }
         return numbers;
     }
 
     private String getDelimiter(String numbers) {
-        Pattern pattern = Pattern.compile("//\\[(.+)]\n(.+)");
-        Matcher matcher = pattern.matcher(numbers);
+        Matcher matcher = CUSTOM_DELIMITER_PATTERN.matcher(numbers);
 
         if(matcher.matches()){
-            return matcher.group(1);
+            return matcher.group(DELIMITER_GROUP);
         }
         return DEFAULT_DELIMITER;
     }

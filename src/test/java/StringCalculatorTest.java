@@ -71,8 +71,14 @@ public class StringCalculatorTest {
     }
 
     @Test
-    public void test_step4_custom_delimiter(){
+    public void test_step4_custom_delimiter_1(){
         int actual = stringCalculator.add("//[-]\n3-2-1-6");
+        assertThat(actual, is(12));
+    }
+
+    @Test
+    public void test_step4_custom_delimiter_2(){
+        int actual = stringCalculator.add("//[!]\n3!2!1!6");
         assertThat(actual, is(12));
     }
 }
