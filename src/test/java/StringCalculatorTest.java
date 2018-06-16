@@ -1,5 +1,7 @@
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -10,6 +12,8 @@ import static org.junit.Assert.assertThat;
  */
 public class StringCalculatorTest {
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
     private StringCalculator stringCalculator;
 
     @Before
@@ -80,5 +84,19 @@ public class StringCalculatorTest {
     public void test_step4_custom_delimiter_2(){
         int actual = stringCalculator.add("//[!]\n3!2!1!6");
         assertThat(actual, is(12));
+    }
+
+    @Test
+    public void test_step5_negative_not_allowed_1(){
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("negatives not allowed: -5");
+        stringCalculator.add("3,2,1,-5");
+    }
+
+    @Test
+    public void test_step5_negative_not_allowed_2(){
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("negatives not allowed: -1, -5");
+        stringCalculator.add("-1,3,2,1,-5");
     }
 }
