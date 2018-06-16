@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * @author Felipe Soler
@@ -11,8 +10,8 @@ public class StringCalculator {
         if(numbers == null || numbers.isEmpty()){
             return 0;
         }
-        return Arrays.stream(numbers.split("\\,|\\n"))
-                .collect(Collectors.summingInt(Integer::valueOf));
+        return Arrays.stream(numbers.split("[,\\n]"))
+                .mapToInt(Integer::valueOf).sum();
     }
 
 }
