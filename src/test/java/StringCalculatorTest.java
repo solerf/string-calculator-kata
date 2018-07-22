@@ -99,4 +99,22 @@ public class StringCalculatorTest {
         expectedException.expectMessage("negatives not allowed: -1, -5");
         stringCalculator.add("-1,3,2,1,-5");
     }
+
+    @Test
+    public void test_step6_ignore_bigger_than_1000_1(){
+        int actual = stringCalculator.add("1001,3,1000,6800");
+        assertThat(actual, is(1003));
+    }
+
+    @Test
+    public void test_step6_ignore_bigger_than_1000_2(){
+        int actual = stringCalculator.add("//[x]\n1001x1090x1100x5000");
+        assertThat(actual, is(0));
+    }
+
+    @Test
+    public void test_step6_ignore_bigger_than_1000_3(){
+        int actual = stringCalculator.add("11\n1090\n1100\n99\n500\n30001");
+        assertThat(actual, is(610));
+    }
 }

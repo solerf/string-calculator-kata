@@ -32,6 +32,7 @@ public class StringCalculator {
 
         return numbers.stream()
                 .mapToInt(n -> n)
+                .filter(n -> n <= 1000)
                 .sum();
     }
 
