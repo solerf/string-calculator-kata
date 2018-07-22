@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -11,26 +13,15 @@ public class StringCalculator {
 
     public static final String DEFAULT_DELIMITER = "[,\\n]";
     public static final Pattern CUSTOM_DELIMITER_PATTERN = Pattern.compile("//\\[(.+)]\n(.+)");
-    public static final int DELIMITER_GROUP = 1;
-    public static final int NO_DELIMITER_GROUP = 2;
 
-    public int add(String rawNumbers) {
-        if(rawNumbers == null || rawNumbers.isEmpty()){
-            return 0;
-        }
+    public int add(final String rawNumbers) {
+        if (isEmpty(rawNumbers)) return 0;
 
-        String delimiter = getDelimiter(rawNumbers);
-        String[] numbers = removeDelimiter(rawNumbers).split(delimiter);
-
-        checkNegative(numbers);
-
-        return Arrays.stream(numbers)
-                .mapToInt(Integer::valueOf).sum();
-    }
-
-    private void checkNegative(String[] numbers) {
-        String negatives = Arrays.stream(numbers)
+        final List<Integer> numbers = getNumbers(rawNumbers).stream()
                 .map(Integer::valueOf)
+                .collect(Collectors.toList());
+
+        final String negatives = numbers.stream()
                 .filter(n -> n < 0)
                 .map(Object::toString)
                 .collect(Collectors.joining(", "));
@@ -38,24 +29,28 @@ public class StringCalculator {
         if(!negatives.isEmpty()){
             throw new IllegalArgumentException(String.format("negatives not allowed: %s", negatives));
         }
+
+        return numbers.stream()
+                .mapToInt(n -> n)
+                .sum();
     }
 
-    private String removeDelimiter(String numbers) {
-        Matcher matcher = CUSTOM_DELIMITER_PATTERN.matcher(numbers);
-
-        if(matcher.matches()){
-            return matcher.group(NO_DELIMITER_GROUP);
-        }
-        return numbers;
+    private boolean isEmpty(final String rawNumbers) {
+        return rawNumbers == null || rawNumbers.isEmpty();
     }
 
-    private String getDelimiter(String numbers) {
-        Matcher matcher = CUSTOM_DELIMITER_PATTERN.matcher(numbers);
+    private Collection<String> getNumbers(final String rawNumbers) {
+        final String delimiter = getDelimiter(rawNumbers);
+        final int noDelimiterGroup = 2;
+        final Matcher matcher = CUSTOM_DELIMITER_PATTERN.matcher(rawNumbers);
+        String[] numbers = matcher.matches() ? matcher.group(noDelimiterGroup).split(delimiter) : rawNumbers.split(delimiter);
+        return Arrays.asList(numbers);
+    }
 
-        if(matcher.matches()){
-            return matcher.group(DELIMITER_GROUP);
-        }
-        return DEFAULT_DELIMITER;
+    private String getDelimiter(final String rawNumbers) {
+        final int delimiterGroup = 1;
+        final Matcher matcher = CUSTOM_DELIMITER_PATTERN.matcher(rawNumbers);
+        return matcher.matches() ? matcher.group(delimiterGroup) : DEFAULT_DELIMITER;
     }
 
 }
